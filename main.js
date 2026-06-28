@@ -117,3 +117,375 @@ scrollBtn.addEventListener("click",()=>{
     });
 
 });
+/* ======================================================
+   SCROLL REVEAL ANIMATION
+====================================================== */
+
+const revealElements = document.querySelectorAll(".fade-up");
+
+const revealOnScroll = () => {
+
+    revealElements.forEach(element => {
+
+        const elementTop = element.getBoundingClientRect().top;
+
+        const windowHeight = window.innerHeight;
+
+        if (elementTop < windowHeight - 100) {
+
+            element.classList.add("show");
+
+        }
+
+    });
+
+};
+
+window.addEventListener("scroll", revealOnScroll);
+
+revealOnScroll();
+
+
+/* ======================================================
+   ANIMATED COUNTERS
+====================================================== */
+
+const counters = document.querySelectorAll(".counter");
+
+const counterObserver = new IntersectionObserver((entries) => {
+
+    entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+            const counter = entry.target;
+
+            const target = parseInt(counter.dataset.target);
+
+            let current = 0;
+
+            const increment = target / 120;
+
+            const updateCounter = () => {
+
+                current += increment;
+
+                if (current < target) {
+
+                    counter.innerText = Math.ceil(current);
+
+                    requestAnimationFrame(updateCounter);
+
+                } else {
+
+                    counter.innerText = target;
+
+                }
+
+            };
+
+            updateCounter();
+
+            counterObserver.unobserve(counter);
+
+        }
+
+    });
+
+}, {
+
+    threshold: 0.5
+
+});
+
+counters.forEach(counter => {
+
+    counterObserver.observe(counter);
+
+});
+
+
+/* ======================================================
+   FAQ ACCORDION
+====================================================== */
+
+const faqItems = document.querySelectorAll(".faq-item");
+
+faqItems.forEach(item => {
+
+    const question = item.querySelector(".faq-question");
+
+    question.addEventListener("click", () => {
+
+        faqItems.forEach(faq => {
+
+            if (faq !== item) {
+
+                faq.classList.remove("active");
+
+            }
+
+        });
+
+        item.classList.toggle("active");
+
+    });
+
+});
+
+
+/* ======================================================
+   TESTIMONIAL SLIDER
+====================================================== */
+
+const testimonials = document.querySelectorAll(".testimonial-card");
+
+let currentSlide = 0;
+
+function showSlide(index){
+
+    testimonials.forEach(card => {
+
+        card.style.display = "none";
+
+    });
+
+    testimonials[index].style.display = "block";
+
+}
+
+if(testimonials.length){
+
+    showSlide(currentSlide);
+
+    setInterval(() => {
+
+        currentSlide++;
+
+        if(currentSlide >= testimonials.length){
+
+            currentSlide = 0;
+
+        }
+
+        showSlide(currentSlide);
+
+    },5000);
+
+}/* ======================================================
+   BOOKING FORM (WhatsApp)
+====================================================== */
+
+const bookingForm = document.getElementById("bookingForm");
+
+if (bookingForm) {
+
+    bookingForm.addEventListener("submit", function (e) {
+
+        e.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const phone = document.getElementById("phone").value;
+        const department = document.getElementById("department").value;
+        const doctor = document.getElementById("doctor").value;
+        const date = document.getElementById("date").value;
+        const time = document.getElementById("time").value;
+
+        const message =
+`🏥 طلب حجز موعد
+
+👤 الاسم: ${name}
+
+📱 الهاتف: ${phone}
+
+🏥 القسم: ${department}
+
+👨‍⚕️ الطبيب: ${doctor}
+
+📅 التاريخ: ${date}
+
+🕒 الوقت: ${time}`;
+
+        window.open(
+
+            "https://wa.me/249113442001?text=" +
+
+            encodeURIComponent(message),
+
+            "_blank"
+
+        );
+
+    });
+
+}
+
+
+/* ======================================================
+   ASK DOCTOR FORM
+====================================================== */
+
+const questionForm = document.getElementById("questionForm");
+
+if(questionForm){
+
+questionForm.addEventListener("submit",function(e){
+
+e.preventDefault();
+
+const name=document.getElementById("questionName").value;
+
+const phone=document.getElementById("questionPhone").value;
+
+const department=document.getElementById("questionDepartment").value;
+
+const question=document.getElementById("questionMessage").value;
+
+const text=
+
+`💬 سؤال طبي جديد
+
+👤 الاسم : ${name}
+
+📱 الهاتف : ${phone}
+
+🏥 القسم : ${department}
+
+❓ السؤال :
+
+${question}`;
+
+window.open(
+
+"https://wa.me/249113442001?text="+
+
+encodeURIComponent(text),
+
+"_blank"
+
+);
+
+});
+
+}
+
+
+/* ======================================================
+IMAGE GALLERY LIGHTBOX
+====================================================== */
+
+const galleryImages=document.querySelectorAll(".gallery-grid img");
+
+galleryImages.forEach(image=>{
+
+image.addEventListener("click",()=>{
+
+const overlay=document.createElement("div");
+
+overlay.className="lightbox";
+
+overlay.innerHTML=
+
+`<img src="${image.src}">
+
+<span class="close-lightbox">&times;</span>`;
+
+document.body.appendChild(overlay);
+
+overlay.addEventListener("click",()=>{
+
+overlay.remove();
+
+});
+
+});
+
+});
+
+
+/* ======================================================
+ACTIVE NAVIGATION
+====================================================== */
+
+const sections=document.querySelectorAll("section");
+
+const navLinks=document.querySelectorAll(".nav-menu a");
+
+window.addEventListener("scroll",()=>{
+
+let current="";
+
+sections.forEach(section=>{
+
+const top=section.offsetTop-120;
+
+const height=section.offsetHeight;
+
+if(pageYOffset>=top){
+
+current=section.getAttribute("id");
+
+}
+
+});
+
+navLinks.forEach(link=>{
+
+link.classList.remove("active");
+
+if(link.getAttribute("href")==="#"+current){
+
+link.classList.add("active");
+
+}
+
+});
+
+});
+
+
+/* ======================================================
+SMOOTH SCROLL
+====================================================== */
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+
+anchor.addEventListener("click",function(e){
+
+e.preventDefault();
+
+const target=document.querySelector(this.getAttribute("href"));
+
+if(target){
+
+target.scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+}
+
+});
+
+});
+
+
+/* ======================================================
+CURRENT YEAR
+====================================================== */
+
+const year=document.querySelector(".current-year");
+
+if(year){
+
+year.textContent=new Date().getFullYear();
+
+}
+
+
+/* ======================================================
+END OF FILE
+====================================================== */
+
+console.log("Mostasharak Medical Clinic Loaded Successfully");
